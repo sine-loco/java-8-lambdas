@@ -1,0 +1,5 @@
+include ':chapter-01'
+include ':chapter-02'
+include ':chapter-03'
+
+rootProject.name = "java-8-lambdas"
