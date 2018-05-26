@@ -1,5 +1,15 @@
-include ':chapter-01'
-include ':chapter-02'
-include ':chapter-03'
+pluginManagement {
+    repositories {
+        maven { url 'maven-repo' }
+        gradlePluginPortal()
+        ivy { url 'ivy-repo' }
+    }
+}
 
-rootProject.name = "java-8-lambdas"
+
+include 'chapter-01'
+include 'chapter-02'
+include 'chapter-03'
+
+rootProject.name = 'java-8-lambdas'
+
