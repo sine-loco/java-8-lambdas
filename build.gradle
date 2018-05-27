@@ -23,7 +23,7 @@ subprojects {
     apply plugin: 'io.spring.dependency-management'
 
     group = 'ru.snm.tutorial.java_8_lambdas'
-    version = '0.2.0-SNAPSHOT'
+    version = '0.3.0-SNAPSHOT'
 
     repositories {
         jcenter()
@@ -39,14 +39,16 @@ subprojects {
                 entry 'junit-jupiter-engine'
                 entry 'junit-jupiter-params'
             }
-
             dependencySet( group: 'org.junit.vintage', version: '5.2.0' ) {
                 entry 'junit-jupiter-vintage'
                 entry 'junit-vintage-engine'
             }
-
             dependencySet( group: 'org.junit.platform', version: '1.2.0' ) {
                 entry 'junit-platform-runner'
+            }
+
+            dependencySet( group: 'org.testng', version: '6.14.3' ) {
+                entry 'testng'
             }
 
             dependencySet( group: 'org.jetbrains.kotlin', version: '1.2.41' ) {
@@ -83,6 +85,8 @@ subprojects {
                 'org.junit.platform:junit-platform-runner',
 
                 'org.spockframework:spock-core',
+
+                'org.testng:testng',
         )
 
         testRuntimeOnly(
@@ -91,13 +95,11 @@ subprojects {
                 'org.junit.jupiter:junit-jupiter-engine',
                 
                 'org.junit.vintage:junit-vintage-engine',
-               
         )
     }
 
-    test {
-        useJUnitPlatform()
-
+    task 'test-testNg'( type: Test ) {
+        useTestNG()
 
         // always run tests
         outputs.upToDateWhen { false }
@@ -112,6 +114,26 @@ subprojects {
             html.enabled = true
         }
     }
+
+    test {
+        // JUntit + Spock
+        useJUnitPlatform()
+
+        // always run tests
+        outputs.upToDateWhen { false }
+        failFast = false
+
+        testLogging.showStandardStreams = true
+        testLogging {
+            events "passed", "skipped", "failed"
+        }
+
+        reports {
+            html.enabled = true
+        }
+
+        dependsOn 'test-testNg'
+    }
 }
 
 project( ':chapter-03' ) {
@@ -122,5 +144,4 @@ project( ':chapter-03' ) {
                 project( ':chapter-01' ).sourceSets.test.output
         )
     }
-
 }
